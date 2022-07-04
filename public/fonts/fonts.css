@@ -1,0 +1,13 @@
+@font-face {
+    font-family: vazir-font;
+
+    src: url("Vazir.eot") format("eot");
+    src: url("Vazir.ttf") format("ttf");
+    src: url("Vazir.woff") format("woff");
+    src: url("Vazir.woff2") format("woff2");
+}
+
+body{
+
+    background-color: #1a202c;
+}
