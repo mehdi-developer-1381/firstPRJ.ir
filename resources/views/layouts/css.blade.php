@@ -8,6 +8,6 @@
     <title>Document</title>
 </head>
 <body style="font-family: vazir-font">
-    <h1>سلام فرمانده</h1>
+
 </body>
 </html>

@@ -3,7 +3,10 @@
     <link rel="stylesheet" href="{{asset("fonts/fonts.css")}}">
     <x-slot name="header">
         <h2>Hi {{\Illuminate\Support\Facades\Auth::user()->email}}</h2>
-        <b>رضا مصلایی خواه</b>
+       <b style="float: right;">Total Users
+           <span class="alert alert-danger" style="font-size: 17px;color: white; border: none; background-color: lightcoral; padding: 4px 4px 4px 4px">{{count($users)}}</span>
+       </b>
+        <br>
     </x-slot>
 
     <div class="py-12">
