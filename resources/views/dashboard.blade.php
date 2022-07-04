@@ -1,3 +1,4 @@
+@extends("layouts.css")
 <x-app-layout>
     <link rel="stylesheet" href="{{asset("fonts/fonts.css")}}">
     <x-slot name="header">

@@ -1,5 +1,5 @@
 @font-face {
-    font-family: vazir-font;
+    font-family: "vazir-font";
 
     src: url("Vazir.eot") format("eot");
     src: url("Vazir.ttf") format("ttf");
@@ -8,6 +8,5 @@
 }
 
 body{
-
-    background-color: #1a202c;
+    font-family: "vazir-font"; ;
 }
