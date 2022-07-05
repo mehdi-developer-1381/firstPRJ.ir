@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
+use App\Http\Controllers\Controller;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +30,4 @@ Route::middleware([
     })->name('dashboard');
 });
 
-Route::get("demo",function(){
-    return view("demo");
-});
+Route::get("demo",["uses"=>"App\\Http\\Controllers\\Controller@test"]);
