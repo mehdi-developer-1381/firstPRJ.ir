@@ -2,8 +2,8 @@
 <x-app-layout>
     <link rel="stylesheet" href="{{asset("fonts/fonts.css")}}">
     <x-slot name="header">
-        <h2>Hi {{\Illuminate\Support\Facades\Auth::user()->email}}</h2>
-       <b style="float: right;">Total Users
+        <h2>سلام {{\Illuminate\Support\Facades\Auth::user()->email}}</h2>
+       <b style="float: left;">مجموع کاربران
            <span class="alert alert-danger" style="font-size: 17px;color: white; border: none; background-color: lightcoral; padding: 4px 4px 4px 4px">{{count($users)}}</span>
        </b>
         <br>
@@ -18,10 +18,10 @@
 
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Create</th>
+                            <th>شناسه</th>
+                            <th>نام</th>
+                            <th>ایمیل</th>
+                            <th>تاریخ‌ساخت</th>
                         </tr>
                     </thead>
                     <tbody>
