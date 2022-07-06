@@ -2,7 +2,7 @@
 <x-app-layout>
     <link rel="stylesheet" href="{{asset("fonts/fonts.css")}}">
     <x-slot name="header">
-        <h2>سلام {{\Illuminate\Support\Facades\Auth::user()->email}}</h2>
+        <h4>سلام {{\Illuminate\Support\Facades\Auth::user()->name}}</h4>
        <b style="float: left;">مجموع کاربران
            <span class="alert alert-danger" style="font-size: 17px;color: white; border: none; background-color: lightcoral; padding: 4px 4px 4px 4px">{{count($users)}}</span>
        </b>
@@ -21,7 +21,7 @@
                             <th>شناسه</th>
                             <th>نام</th>
                             <th>ایمیل</th>
-                            <th>تاریخ‌ساخت</th>
+                            <th>عضویت</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -31,7 +31,7 @@
                                <td>{{$user->name}}</td>
                                <td>{{$user->email}}</td>
 
-                               <td>{{$user->created_at->diffForHumans()}}</td>
+                               <td>{{\Morilog\Jalali\Jalalian::forge($user->created_at)->ago()}}</td>
 
 
                            </tr>
