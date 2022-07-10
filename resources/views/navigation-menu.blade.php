@@ -14,10 +14,11 @@
                         {{ __('داشبورد') }}
                     </x-jet-nav-link>
 
-                    <x-jet-nav-link href="{{route("categories")}}" style="margin-right: 10px;">
-                        دسته‌بندی‌ها
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-jet-nav-link href="{{route('categories')}}" :active="request()->routeIs('categories')">
+                        {{ __('دسته‌بندی‌ها') }}
                     </x-jet-nav-link>
-
                 </div>
             </div>
 

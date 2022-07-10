@@ -33,4 +33,4 @@ Route::middleware([
 Route::get("demo",["uses"=>"App\\Http\\Controllers\\Controller@test"]);
 
 //Category controller
-//Route::get("categories",["uses"=>"App\\Http\\Controllers\\Controller"]);
+Route::get("categories",["uses"=>"App\\Http\\Controllers\\categoryController@store"])->name("categories");
