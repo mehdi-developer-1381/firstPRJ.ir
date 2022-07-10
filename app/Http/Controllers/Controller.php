@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -15,8 +16,7 @@ class Controller extends BaseController
 
     public function test()
     {
-        $created_at=User::find(3)->created_at;
-        $parseToJalali=Jalalian::forge("2022-07-03 03:56:40");
-        return view("demo",compact("parseToJalali"));
+        $softDeletedUser=User::onlyTrashed()->find(2)->restore();
+
     }
 }
