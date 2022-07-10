@@ -14,9 +14,10 @@
                         {{ __('داشبورد') }}
                     </x-jet-nav-link>
 
-                    <x-jet-nav-link href="" style="margin-right: 10px;">
-                        {{ __('دسته‌بندی‌ها') }}
+                    <x-jet-nav-link href="{{route("categories")}}" style="margin-right: 10px;">
+                        دسته‌بندی‌ها
                     </x-jet-nav-link>
+
                 </div>
             </div>
 
