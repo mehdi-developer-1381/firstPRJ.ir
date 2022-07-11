@@ -3,7 +3,7 @@
 
     <x-slot name="header">
 
-        {{--metod $users faqat az samt controller miad     --}}
+        {{--metod $users faqat az samt route miad     --}}
         @if(isset($users))
         <h4 id="h4_sayWelcome">سلام {{\Illuminate\Support\Facades\Auth::user()->name}}</h4>
        <b style="float: left;">مجموع کاربران

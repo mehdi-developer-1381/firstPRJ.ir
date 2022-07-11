@@ -16,7 +16,7 @@ class Controller extends BaseController
 
     public function test()
     {
-        $softDeletedUser=User::onlyTrashed()->find(2)->restore();
+       return view("demo");
 
     }
 }
