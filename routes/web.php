@@ -30,11 +30,12 @@ Route::middleware([
     })->name('dashboard');
 });
 
-Route::get("demo",["uses"=>"App\\Http\\Controllers\\Controller@test"]);
+Route::get("demo",["uses"=>"App\\Http\\Controllers\\Controller@test"])->name("demo");
 
 //Category controller
 Route::group(["prefix"=>"categories"],function(){
     Route::get("",["uses"=>"App\\Http\\Controllers\\categoryController@index"])->name("categories");
-    Route::get("/store",["uses"=>"App\\Http\\Controllers\\categoryController@store"])->name("category.store");
+    Route::post("/store/{user_create_category}",["uses"=>"App\\Http\\Controllers\\categoryController@store"])->name("category.store");
+    Route::post("/remove/{param}",["uses"=>"App\\Http\\Controllers\\categoryController@remove"])->name("category.remove");
 });
 
