@@ -32,9 +32,9 @@ class categoryController extends Controller
                "category_name" => $request->input("category_name")
            ]);
 
-           $category_created="successful";
 
-            return \redirect()->route("categories")->with("category_created",$category_created);
+
+            return \redirect()->route("categories")->with("category_message","active")->with("message_active","created_category");
         }
 
 
@@ -42,8 +42,20 @@ class categoryController extends Controller
 
     public function remove(Request $request,$param)
     {
-        $category_removed=Category::find($param)->delete();
-        return \redirect()->route("categories");
+        $category_removed=Category::find($param)->forceDelete();
+        return \redirect()->route("categories")->with("category_message","active")->with("message_active","removed_category");
 
+    }
+
+    public function total_remove(Request $request)
+    {
+        if(isset($request->all()["categoris"])) {
+            foreach ($request->all()["categoris"] as $category) {
+                Category::find($category)->forceDelete();
+            }
+            return \redirect()->route("categories")->with("category_message","active")->with("message_active","removed_total_category");
+        }else{
+            return \redirect()->back();
+        }
     }
 }
