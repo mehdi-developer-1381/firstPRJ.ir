@@ -17,7 +17,7 @@ class Controller extends BaseController
 
     public function test()
     {
-      dd($category_created);
+      return view("demo");
 
     }
 }

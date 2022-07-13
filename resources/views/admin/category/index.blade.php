@@ -54,40 +54,51 @@
                                         <th>شناسه دسته</th>
                                         <th>نام دسته</th>
                                         <th>زمان ثبت</th>
-                                        <td style="direction: ltr; padding-left: 80px;">
-                                            <button class="btn btn-primary btn-sm rounded-0" title="Remove Checked Categories" type="submit" form="category_checked_form" form data-toggle="tooltip" data-placement="top" title="Add" style="display: inline; background-color: red;border: 1px solid red;">
+
+                                        <th style="direction: ltr; ">
+                                            <button id="remove_checked_category_btn"  class="btn btn-primary btn-sm rounded-0" title="Remove Checked Categories" type="submit" form="category_checked_form" form data-toggle="tooltip" data-placement="top" title="Add" style="display: inline; background-color: red;border: 1px solid red;">
                                                 <i class="ri-delete-bin-2-line"></i>
                                             </button>
-                                        </td>
+                                            <button id="edit_categories_btn"  class="btn btn-primary btn-sm rounded-0" title="Edit Categories" type="submit" form="category_total_update" form data-toggle="tooltip" data-placement="top" title="Add" style="display: inline; background-color: orange;border: 1px solid orange;">
+                                                <i class="ri-check-double-line"></i>
+                                            </button>
+                                        </th>
+
+
                                     </tr>
                                 </thead>
                                 <tbody>
                                 @if(isset($categories) && !empty($categories))
                                     @foreach($categories as $category)
-                                        <tr >
+                                        <tr>
                                             <td>{{$category->id}}</td>
-                                            <td>{{$category->category_name}}</td>
+
+                                            <td>
+                                                <input id="category_{{$category->id}}" category_update_input_id="{{$category->id}}" name="category_{{$category->id}}" form="category_total_update" type="text" style="border: none; background:none; cursor: text;" disabled="true" readonly="true" value="{{$category->category_name}}">
+                                            </td>
                                             <td>{{\Morilog\Jalali\Jalalian::forge($category->created_at)->ago()}}</td>
+
                                             <td style="width: fit-content; direction: ltr;">
                                                 <form action="{{route("category.remove",$category->id)}}" method="post" style="width: fit-content;display: inline;">
                                                     @csrf
-                                                    <button class="btn btn-primary btn-sm rounded-0" type="submit" data-toggle="tooltip" data-placement="top" title="Add" style="display: inline; background-color: red;border: 1px solid red;">
-                                                        <i class="ri-delete-bin-2-line"></i>
+                                                    <button class="btn btn-primary btn-sm rounded-0" type="submit" data-toggle="tooltip" data-placement="top" title="remove" style="display: inline; background-color: red;border: 1px solid red;">
+                                                        <i class="ri-close-line"></i>
                                                     </button>
                                                 </form>
-                                                <form action="{{route("category.update",$category->id)}}" method="post" style="width: fit-content;display: inline;">
-                                                    @csrf
-                                                    <button class="btn btn-success btn-sm rounded-0" type="submit" data-toggle="tooltip" data-placement="top" title="Edit" style="display: inline; background-color: orange;border: 1px solid orange;">
+                                                    <button role="update_category_btn" category_update_btn_id="{{$category->id}}" class="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Edit" style="display: inline; background-color: orange;border: 1px solid orange;">
                                                         <i class="ri-edit-2-line"></i>
                                                     </button>
-                                                </form>
 
-                                                <input class="form-check-input" form="category_checked_form" name="categoris[]" type="checkbox" value="{{$category->id}}" style="width: 32px; height: 34px; margin-top: 0;">
+                                                <input class="form-check-input" form="category_checked_form" name="categoris[]" onclick="checkbox_checked()" type="checkbox" value="{{$category->id}}" style="width: 32px; height: 34px; margin-top: 0;">
                                             </td>
                                         </tr>
                                     @endforeach
                                     <form action="{{route("category.total.delete")}}" id="category_checked_form" method="post" style="display: inline;">
                                         @csrf
+                                    </form>
+                                    <form action="{{route("category.total.update")}}" id="category_total_update" method="post" style="display: inline;">
+                                        @csrf
+
                                     </form>
                                 @endif
                                 </tbody>
@@ -103,14 +114,14 @@
 
                                 <div class="mb-3">
                                     <label for="text-categoryName" class="form-label">نام دسته</label>
-                                    <input type="text" value="{{old("category_name")}}" name="category_name" class="form-control" id="text-categoryName" placeholder="مثلا لوازم الکتریکی یا کتاب....">
+                                    <input tabindex="1  " type="text" value="{{old("category_name")}}" name="category_name" class="form-control" id="text-categoryName" placeholder="مثلا لوازم الکتریکی یا کتاب....">
 
                                     @error("category_name")
                                         <span class="text-danger" style="font-size: 14px;">{{$message}}</span>
                                     @enderror
                                 </div>
                                 <div class="d-grid gap-2 d-md-block">
-                                    <input class="btn btn-primary" type="submit" value="ثبت">
+                                    <input class="btn btn-primary" type="submit" value="ثبت" tabindex="2">
                                 </div>
                             </div>
                          </div>
@@ -123,9 +134,37 @@
 </x-app-layout>
 
 <script>
+    // this script for fade message
     window.setTimeout(function() {
         $(".alert").fadeTo(1000, 0).slideUp(500, function(){
             $(this).remove();
         });
     }, 3000);
+
+
+    // this script for total Remove category, checkbox
+    function checkbox_checked(){
+        $("#remove_checked_category_btn").removeAttr("hidden");
+    }
+
+
+
+    // this script for update category column
+
+        $("button[role='update_category_btn']").click(function(){
+
+            //this var is category->id, is btn update element
+            this_button_click_for_update_cat_id=$(this).attr("category_update_btn_id");
+
+            //this var is input category_id
+            input_cat_id=$("input[category_update_input_id="+ this_button_click_for_update_cat_id +"]")[0];
+            input_cat_id.removeAttribute("readonly");
+            input_cat_id.removeAttribute("disabled");
+
+            // change add border to selected input
+            $("#category_"+ this_button_click_for_update_cat_id +"").css("border","1px solid blue")
+
+
+        });
+
 </script>

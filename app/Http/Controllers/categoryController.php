@@ -58,4 +58,23 @@ class categoryController extends Controller
             return \redirect()->back();
         }
     }
+
+    public function total_update(Request $request)
+    {
+        $category_keys_form_index=array_keys($request->except("_token"));
+        $category_values_form_index=array_values($request->except("_token"));
+        $category_keys_form_index_exploded=null;
+        $category_values_form_index_foreach=null;
+//        dd($request->except("_token"));
+
+        for($i=0; $i<count($category_keys_form_index); $i++){
+                    $category_keys_form_index_exploded=explode("_",$category_keys_form_index[$i])[1];
+                    $category_values_form_index_foreach=$category_values_form_index[$i];
+
+                    Category::find($category_keys_form_index_exploded)->update([
+                        "category_name"=>$category_values_form_index_foreach
+                    ]);
+        }
+        return \redirect()->route("categories");
+    }
 }

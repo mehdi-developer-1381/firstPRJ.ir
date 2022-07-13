@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="{{asset("fonts/fonts.css")}}">
     <link rel="stylesheet" href="../../css/dashboard.css">
     <title>Document</title>
+    <style>
+        input:focus{
+            outline: none; !important;
+        }
+    </style>
 </head>
 <body style="font-family: vazir-font">
 
