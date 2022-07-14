@@ -1,0 +1,53 @@
+warning: in the working copy of 'app/Http/Controllers/Controller.php', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/Http/Controllers/categoryController.php', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'config/session.php', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'resources/views/demo.blade.php', LF will be replaced by CRLF the next time Git touches it
+[1mdiff --git a/app/Http/Controllers/Controller.php b/app/Http/Controllers/Controller.php[m
+[1mindex ef7895b..323cbab 100644[m
+[1m--- a/app/Http/Controllers/Controller.php[m
+[1m+++ b/app/Http/Controllers/Controller.php[m
+[36m@@ -17,6 +17,7 @@[m [mclass Controller extends BaseController[m
+ [m
+     public function test()[m
+     {[m
+[32m+[m[32m        dd(\session()->all());[m
+       return view("demo");[m
+ [m
+     }[m
+[1mdiff --git a/config/session.php b/config/session.php[m
+[1mindex cbcaf0b..931e1c6 100644[m
+[1m--- a/config/session.php[m
+[1m+++ b/config/session.php[m
+[36m@@ -31,7 +31,7 @@[m
+     |[m
+     */[m
+ [m
+[31m-    'lifetime' => env('SESSION_LIFETIME', 120),[m
+[32m+[m[32m    'lifetime' => env("SESSION_LIFETIME",120),[m
+ [m
+     'expire_on_close' => false,[m
+ [m
+[1mdiff --git a/resources/views/demo.blade.php b/resources/views/demo.blade.php[m
+[1mindex 0240574..0f9dd5b 100644[m
+[1m--- a/resources/views/demo.blade.php[m
+[1m+++ b/resources/views/demo.blade.php[m
+[36m@@ -12,19 +12,5 @@[m
+ <button id="btn">click</button>[m
+ [m
+ [m
+[31m-<script src="{{asset("js/jquery-3.6.0.min.js")}}"></script>[m
+[31m-[m
+[31m-<script src="{{asset("js/index.js")}}"></script>[m
+[31m-[m
+[31m-<script>[m
+[31m-[m
+[31m-    let test=new click();[m
+[31m-    test.counter_click();[m
+[31m-    test.up_down_click("#btn");[m
+[31m-</script>[m
+[31m-[m
+[31m-[m
+[31m-[m
+[31m-[m
+ </body>[m
+ </html>[m

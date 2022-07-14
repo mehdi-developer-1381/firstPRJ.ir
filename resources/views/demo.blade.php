@@ -12,19 +12,5 @@
 <button id="btn">click</button>
 
 
-<script src="{{asset("js/jquery-3.6.0.min.js")}}"></script>
-
-<script src="{{asset("js/index.js")}}"></script>
-
-<script>
-
-    let test=new click();
-    test.counter_click();
-    test.up_down_click("#btn");
-</script>
-
-
-
-
 </body>
 </html>
