@@ -17,8 +17,7 @@ class Controller extends BaseController
 
     public function test()
     {
-        dd(\session()->all());
-      return view("demo");
+      return view("demo/demo");
 
     }
 }

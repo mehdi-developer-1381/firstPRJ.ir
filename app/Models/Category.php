@@ -15,4 +15,9 @@ class Category extends Model
     protected $fillable=["user_id","category_name","deleted_at"];
     public $timestamps=true;
 
+    public function user()
+    {
+        return $this->belongsTo(User::class,"user_id","id");
+    }
+
 }

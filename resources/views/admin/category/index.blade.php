@@ -21,10 +21,9 @@
                 ?>
             @elseif(session("message_active")=="removed_total_category")
                 <?php
-                $svg_path_created="m12.002 21.534c5.518 0 9.998-4.48 9.998-9.998s-4.48-9.997-9.998-9.997c-5.517 0-9.997 4.479-9.997 9.997s4.48 9.998 9.997 9.998zm0-1.5c-4.69 0-8.497-3.808-8.497-8.498s3.807-8.497 8.497-8.497 8.498 3.807 8.498 8.497-3.808 8.498-8.498 8.498zm0-6.5c-.414 0-.75-.336-.75-.75v-5.5c0-.414.336-.75.75-.75s.75.336.75.75v5.5c0 .414-.336.75-.75.75zm-.002 3c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1z";
-                $span_alert_message="دسته‌های مورد نظر با موفقیت حذف شد";
-                $alert_color="danger";
-
+                    $svg_path_created="m12.002 21.534c5.518 0 9.998-4.48 9.998-9.998s-4.48-9.997-9.998-9.997c-5.517 0-9.997 4.479-9.997 9.997s4.48 9.998 9.997 9.998zm0-1.5c-4.69 0-8.497-3.808-8.497-8.498s3.807-8.497 8.497-8.497 8.498 3.807 8.498 8.497-3.808 8.498-8.498 8.498zm0-6.5c-.414 0-.75-.336-.75-.75v-5.5c0-.414.336-.75.75-.75s.75.336.75.75v5.5c0 .414-.336.75-.75.75zm-.002 3c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1z";
+                    $span_alert_message="دسته‌های مورد نظر با موفقیت حذف شد";
+                    $alert_color="danger";
                 ?>
             @endif
         @endif
@@ -52,6 +51,7 @@
                                 <thead>
                                     <tr>
                                         <th>شناسه دسته</th>
+                                        <th>نام کاربر</th>
                                         <th>نام دسته</th>
                                         <th>زمان ثبت</th>
 
@@ -72,11 +72,18 @@
                                     @foreach($categories as $category)
                                         <tr>
                                             <td>{{$category->id}}</td>
+                                            <td>{{$category->user->name}}</td>
 
                                             <td>
-                                                <input id="category_{{$category->id}}" category_update_input_id="{{$category->id}}" name="category_{{$category->id}}" form="category_total_update" type="text" style="border: none; background:none; cursor: text;" disabled="true" readonly="true" value="{{$category->category_name}}">
+                                                <input id="category_{{$category->id}}" category_update_input_id="{{$category->id}}" name="category_{{$category->id}}" form="category_total_update" type="text" style="border: none; background:none; cursor: text; padding: 0;" disabled="true" readonly="true" value="{{$category->category_name}}">
                                             </td>
-                                            <td>{{\Morilog\Jalali\Jalalian::forge($category->created_at)->ago()}}</td>
+                                            <td>
+                                                @if($category->created_at)
+                                                    {{\Morilog\Jalali\Jalalian::forge($category->created_at)->ago()}}
+                                                @else
+                                                    <span class="text-danger">بدون تاریخ</span>
+                                                @endif
+                                            </td>
 
                                             <td style="width: fit-content; direction: ltr;">
                                                 <form action="{{route("category.remove",$category->id)}}" method="post" style="width: fit-content;display: inline;">
@@ -103,6 +110,7 @@
                                 @endif
                                 </tbody>
                             </table>
+                            {{$categories->onEachSide(0)->links("vendor.pagination.bootstrap-4")}}
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -132,7 +140,6 @@
     </div>
 
 </x-app-layout>
-
 <script>
     // this script for fade message
     window.setTimeout(function() {

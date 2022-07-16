@@ -63,4 +63,9 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
+    public function category()
+    {
+        return $this->hasOne(Category::class,"user_id","id");
+    }
+
 }
