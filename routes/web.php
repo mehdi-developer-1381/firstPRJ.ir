@@ -42,3 +42,4 @@ Route::group(["prefix"=>"categories"],function(){
     Route::post("/total/update",["uses"=>"App\\Http\\Controllers\\categoryController@total_update"])->name("category.total.update");
 });
 
+

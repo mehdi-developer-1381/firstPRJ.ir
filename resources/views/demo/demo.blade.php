@@ -10,19 +10,10 @@
 
 
 </head>
-<body>
-
-<button id="btn">click</button>
-<div id="ajax_box"></div>
 
 
 <script>
-    $(document).ready(function() {
-            $("#btn").click(function () {
-                $("#ajax_box").load("ajax.html");
-            });
-        }
-    )
+
 </script>
 
 </body>

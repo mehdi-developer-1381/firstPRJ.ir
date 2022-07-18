@@ -33,7 +33,7 @@ class categoryController extends Controller
                "category_name" => $request->input("category_name")
            ]);
 
-
+            $request->ajax();
 
             return \redirect()->route("categories")->with("category_message","active")->with("message_active","created_category");
         }
