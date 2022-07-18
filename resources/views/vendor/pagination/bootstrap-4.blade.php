@@ -1,5 +1,5 @@
 @if ($paginator->hasPages())
-    <nav style="direction: ltr; height: 38px">
+    <nav style="direction: ltr; height: 38px; border-bottom: none; border-left: none;">
         <ul class="pagination">
             {{-- Previous Page Link --}}
             @if ($paginator->onFirstPage())
@@ -8,7 +8,7 @@
                 </li>
             @else
                 <li class="page-item">
-                    <a class="page-link" href="{{ $paginator->previousPageUrl() }}" rel="prev" aria-label="@lang('pagination.previous')">&lsaquo;</a>
+                    <a class="page-link" style="border-bottom: none; border-left: none;" href="{{ $paginator->previousPageUrl() }}" rel="prev" aria-label="@lang('pagination.previous')">&lsaquo;</a>
                 </li>
             @endif
 
@@ -23,9 +23,9 @@
                 @if (is_array($element))
                     @foreach ($element as $page => $url)
                         @if ($page == $paginator->currentPage())
-                            <li class="page-item active" aria-current="page"><span class="page-link">{{ $page }}</span></li>
+                            <li class="page-item active"  aria-current="page"><span class="page-link">{{ $page }}</span></li>
                         @else
-                            <li class="page-item"><a class="page-link" href="{{ $url }}">{{ $page }}</a></li>
+                            <li class="page-item"><a class="page-link" style="border-bottom: none; border-left: none;" href="{{ $url }}">{{ $page }}</a></li>
                         @endif
                     @endforeach
                 @endif
@@ -34,7 +34,7 @@
             {{-- Next Page Link --}}
             @if ($paginator->hasMorePages())
                 <li class="page-item">
-                    <a class="page-link" href="{{ $paginator->nextPageUrl() }}" rel="next" aria-label="@lang('pagination.next')">&rsaquo;</a>
+                    <a class="page-link" style="border-bottom: none; border-left: none;" href="{{ $paginator->nextPageUrl() }}" rel="next" aria-label="@lang('pagination.next')">&rsaquo;</a>
                 </li>
             @else
                 <li class="page-item disabled" aria-disabled="true" aria-label="@lang('pagination.next')">

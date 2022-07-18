@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <link rel="stylesheet" href="{{asset("fonts/fonts.css")}}">
+    <link rel="stylesheet" href="{{asset("css/admin-category-index.css")}}">
 
 </head>
 <body>
@@ -19,7 +20,7 @@
 
     {{--categories table--}}
     @include("admin.category.categories_show_in_table.categories_show_in_table")
-
+    {{--pagination--}}
 </x-app-layout>
 
 </body>
@@ -35,10 +36,10 @@
     }, 3000);
 
 
-    // this script for total Remove category, checkbox
-    function checkbox_checked() {
-        $("#remove_checked_category_btn").removeAttr("hidden");
-    }
+    // // this script for total Remove category, checkbox
+    // function checkbox_checked() {
+    //     $("#remove_checked_category_btn").removeAttr("hidden");
+    // }
 
 
     // this script for update category column

@@ -14,19 +14,14 @@
                     <span class="text-danger">بدون تاریخ</span>
                 @endif
             </td>
-
-            <td style="width: fit-content; direction: ltr;">
-                <form action="{{route("category.remove",$category->id)}}" method="post" style="width: fit-content;display: inline;">
-                    @csrf
-                    <button class="btn btn-primary btn-sm rounded-0" type="submit" data-toggle="tooltip" data-placement="top" title="remove" style="display: inline; background-color: red;border: 1px solid red;">
-                        <i class="ri-close-line"></i>
-                    </button>
-                </form>
-                <button role="update_category_btn" category_update_btn_id="{{$category->id}}" class="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Edit" style="display: inline; background-color: orange;border: 1px solid orange;">
-                    <i class="ri-edit-2-line"></i>
+            <td style="text-align: center; padding: 4px 2px 4px 2px;">
+                <button role="update_category_btn" category_update_btn_id="{{$category->id}}" class="btn btn-primary" type="button" data-toggle="tooltip" data-placement="top" title="Edit">
+                    <span>ویرایش</span>
                 </button>
 
-                <input class="form-check-input" form="category_checked_form" name="categoris[]" onclick="checkbox_checked()" type="checkbox" value="{{$category->id}}" style="width: 32px; height: 34px; margin-top: 0;">
+            </td>
+            <td style="padding: 4px 2px 4px 2px; text-align: center;">
+                <input class="form-check-input" form="category_checked_form" name="categories[]" onclick="checkbox_checked()" type="checkbox" value="{{$category->id}}" style="width: 32px; height: 34px; margin-top: 0;">
             </td>
         </tr>
     @endforeach

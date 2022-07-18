@@ -1,22 +1,24 @@
+{{--categories list on table--}}
 <div class="py-12" >
     <div class="container">
         <div class="row">
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">همه دسته‌بندی‌ها</div>
-
                     <table class="table table-striped">
                         <head>
-                            @include("admin.category.categories_show_in_table.categories_table_head")
+                            @php($include_when="categories")
+                            @includeWhen(true,"admin.category.categories_show_in_table.categories_table_head",["table_head"=>"active"])
                         </head>
                         <tbody>
-                            @include("admin.category.categories_show_in_table.categories_table_body")
+                            @include("admin.category.categories_show_in_table.active_categories_table_body")
                         </tbody>
                     </table>
-                    {{$categories->onEachSide(0)->links("vendor.pagination.bootstrap-4")}}
+                    {{$categories->onEachSide(0)->appends(["trashed"=>$trashed_categories->currentPage()])->links("vendor.pagination.bootstrap-4")}}
                 </div>
             </div>
 
+            {{--add category--}}
             <div class="col-md-4">
                 <form action="{{route("category.store",\Illuminate\Support\Facades\Auth::id())}}" method="post" >
                     <div class="card">
@@ -33,12 +35,32 @@
                                 @enderror
                             </div>
                             <div class="d-grid gap-2 d-md-block">
-                                <input class="btn btn-primary" type="submit" value="ثبت" tabindex="2">
+                                <input class="btn btn-success" type="submit" value="ثبت" tabindex="2">
                             </div>
                         </div>
                     </div>
                 </form>
             </div>
+
+            {{--trashed categories--}}
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">دسته‌های حذف شده</div>
+
+                    <table class="table table-striped">
+                        <head>
+                            @php($include_when="trashed")
+                            @includeWhen(true,"admin.category.categories_show_in_table.categories_table_head",["table_head"=>"trashed"])
+                        </head>
+                        <tbody>
+                            @include("admin.category.categories_show_in_table.trashed_categories_table_body")
+                        </tbody>
+                    </table>
+                    {{$trashed_categories->onEachSide(0)->appends(["categories"=>$categories->currentPage()])->links("vendor.pagination.bootstrap-4")}}
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+

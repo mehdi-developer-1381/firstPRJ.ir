@@ -4,15 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\AbstractPaginator;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Redirect;
 
 class categoryController extends Controller
 {
     public function index(Request $request)
     {
-        $categories=Category::paginate(5);
+        $trashed_categories="";
 
-        return view("admin.category.index",compact("categories"));
+
+        if(Category::onlyTrashed()->get()){
+            $trashed_categories=Category::onlyTrashed()->paginate(5,"*","trashed",);
+        }
+        $categories=Category::paginate(5,"*","categories");
+
+        return view("admin.category.index",compact("categories","trashed_categories"));
     }
 
     public function store(Request $request,$user_create_category)
@@ -35,26 +43,20 @@ class categoryController extends Controller
 
             $request->ajax();
 
-            return \redirect()->route("categories")->with("category_message","active")->with("message_active","created_category");
+            return \redirect()->back()->with("category_message","active")->with("message_active","created_category");
         }
 
 
     }
 
-    public function remove(Request $request,$param)
-    {
-        $category_removed=Category::find($param)->forceDelete();
-        return \redirect()->route("categories")->with("category_message","active")->with("message_active","removed_category");
-
-    }
 
     public function total_remove(Request $request)
     {
-        if(isset($request->all()["categoris"])) {
-            foreach ($request->all()["categoris"] as $category) {
-                Category::find($category)->forceDelete();
+        if(isset($request->all()["categories"])) {
+            foreach ($request->all()["categories"] as $category) {
+                Category::find($category)->delete();
             }
-            return \redirect()->route("categories")->with("category_message","active")->with("message_active","removed_total_category");
+            return \redirect()->back()->with("category_message","active")->with("message_active","removed_total_category");
         }else{
             return \redirect()->back();
         }
@@ -75,6 +77,37 @@ class categoryController extends Controller
                         "category_name"=>$category_values_from_index_view_foreach
                     ]);
         }
-        return \redirect()->route("categories");
+        return \redirect()->back();
+
+    }
+
+    public function total_force_delete(Request $request)
+    {
+        $request_all=$request->all();
+        if($request_all["target"] === "force_delete"){
+            if(isset($request_all["categories"])){
+                $force_delete_category="";
+
+                foreach($request_all["categories"] as $category){
+                    $force_delete_category=Category::onlyTrashed()->find($category)->forceDelete();
+                }
+                if($force_delete_category){
+                    return \redirect()->back();
+                }
+            }else{
+                return \redirect()->back();
+            }
+        }elseif($request_all["target"] === "restore"){
+            $restore_category="";
+
+            foreach($request_all["categories"] as $category){
+                $restore_category=Category::onlyTrashed()->find($category)->restore();
+            }
+            if($restore_category){
+                return \redirect()->back();
+            }
+        }else{
+            return \redirect()->back();
+        }
     }
 }
