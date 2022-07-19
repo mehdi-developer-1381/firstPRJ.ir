@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\categoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,13 +35,20 @@ Route::get("demo",["uses"=>"App\\Http\\Controllers\\Controller@test"])->name("de
 
 //Category controller
 Route::group(["prefix"=>"categories"],function(){
-    Route::get("",["uses"=>"App\\Http\\Controllers\\categoryController@index"])->name("categories");
-    Route::post("/store/{user_create_category?}",["uses"=>"App\\Http\\Controllers\\categoryController@store"])->name("category.store");
-    Route::post("/remove/{param?}",["uses"=>"App\\Http\\Controllers\\categoryController@remove"])->name("category.remove");
-    Route::post("/total/remove",["uses"=>"App\\Http\\Controllers\\categoryController@total_remove"])->name("category.total.delete");
-    Route::post("/update/{param?}",["uses"=>"App\\Http\\Controllers\\categoryController@update"])->name("category.update");
-    Route::post("/total/update",["uses"=>"App\\Http\\Controllers\\categoryController@total_update"])->name("category.total.update");
-    Route::post("/total/remove/force",["uses"=>"App\\Http\\Controllers\\categoryController@total_force_delete"])->name("category.total.force.delete");
+    Route::get("",[categoryController::class,"index"])
+        ->name("categories");
+    Route::post("/store/{user_create_category?}",[categoryController::class,"store"])
+        ->name("category.store");
+    Route::post("/remove/{param?}",[categoryController::class,"remove"])
+        ->name("category.remove");
+    Route::post("/total/remove",[categoryController::class,"total_remove"])
+        ->name("category.total.delete");
+    Route::post("/update/{param?}",[categoryController::class,"update"])
+        ->name("category.update");
+    Route::post("/total/update",[categoryController::class,"total_update"])
+        ->name("category.total.update");
+    Route::post("/total/remove/force",[categoryController::class,"total_force_delete"])
+        ->name("category.total.force.delete");
 });
 
 

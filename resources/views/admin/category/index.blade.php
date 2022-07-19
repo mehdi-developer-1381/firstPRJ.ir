@@ -13,7 +13,8 @@
 
 
 <x-app-layout>
-
+    {{--show edit modal--}}
+    @include("admin.category.category_edit_modal")
 
     {{--show fade message--}}
     @include("admin.category.categories_message")
