@@ -37,18 +37,27 @@ Route::get("demo",["uses"=>"App\\Http\\Controllers\\Controller@test"])->name("de
 Route::group(["prefix"=>"categories"],function(){
     Route::get("",[categoryController::class,"index"])
         ->name("categories");
+
     Route::post("/store/{user_create_category?}",[categoryController::class,"store"])
         ->name("category.store");
+
     Route::post("/remove/{param?}",[categoryController::class,"remove"])
         ->name("category.remove");
+
     Route::post("/total/remove",[categoryController::class,"total_remove"])
         ->name("category.total.delete");
+
     Route::post("/update/{param?}",[categoryController::class,"update"])
         ->name("category.update");
+
     Route::post("/total/update",[categoryController::class,"total_update"])
         ->name("category.total.update");
+
     Route::post("/total/remove/force",[categoryController::class,"total_force_delete"])
         ->name("category.total.force.delete");
+
+
 });
+
 
 

@@ -17,7 +17,7 @@
 
 <x-app-layout>
     {{--show edit modal--}}
-    @include("admin.category.category_edit_modal")
+    @include("admin.category.category_edit_modal",$categories)
 
     {{--show fade message--}}
     @include("admin.category.categories_message")
@@ -43,6 +43,9 @@
     $("button[role='update_category_btn']").click(function(){
         // Open modal on page load
         $("#myModal").modal('show');
+
+        // merge category-id to modal form input value
+        $("#input_categoryId_for_modal").attr("value",this.getAttribute("category_update_btn_id"))
 
         // // Close modal on button click
         $("#close_modal_btn").click(function(){

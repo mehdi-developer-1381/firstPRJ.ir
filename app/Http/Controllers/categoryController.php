@@ -62,23 +62,17 @@ class categoryController extends Controller
         }
     }
 
-    public function total_update(Request $request)
+    public function update(Request $request)
     {
-        $category_keys_from_index_view=array_keys($request->except("_token"));
-        $category_values_from_index_view=array_values($request->except("_token"));
+        if($request->except("_token")) {
+            $category_name_ready_for_update = $request->input("category_name");
+            $category_id_ready_for_update = $request->input("category_id");
+            Category::find($category_id_ready_for_update)->update([
+                "category_name"=>$category_name_ready_for_update
+            ]);
 
-
-
-        for($i=0; $i<count($category_keys_from_index_view); $i++){
-                    $exploded_category_keys_from_index_view=explode("_",$category_keys_from_index_view[$i])[1];
-                    $category_values_from_index_view_foreach=$category_values_from_index_view[$i];
-
-                    Category::find($exploded_category_keys_from_index_view)->update([
-                        "category_name"=>$category_values_from_index_view_foreach
-                    ]);
+            return \redirect()->back();
         }
-        return \redirect()->back();
-
     }
 
     public function total_force_delete(Request $request)
@@ -110,4 +104,5 @@ class categoryController extends Controller
             return \redirect()->back();
         }
     }
+
 }
