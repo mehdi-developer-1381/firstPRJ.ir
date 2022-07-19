@@ -1,28 +1,40 @@
-<div class="modal-body" id="category_edit_modal">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-4">.col-md-4</div>
-            <div class="col-md-4 ml-auto">.col-md-4 .ml-auto</div>
-        </div>
-        <div class="row">
-            <div class="col-md-3 ml-auto">.col-md-3 .ml-auto</div>
-            <div class="col-md-2 ml-auto">.col-md-2 .ml-auto</div>
-        </div>
-        <div class="row">
-            <div class="col-md-6 ml-auto">.col-md-6 .ml-auto</div>
-        </div>
-        <div class="row">
-            <div class="col-sm-9">
-                Level 1: .col-sm-9
-                <div class="row">
-                    <div class="col-8 col-sm-6">
-                        Level 2: .col-8 .col-sm-6
-                    </div>
-                    <div class="col-4 col-sm-6">
-                        Level 2: .col-4 .col-sm-6
+{{--<button  class="btn btn-success" data-toggle="modal" data-target="#myModal">Launch Demo Modal</button>--}}
+<div class="modal" id="myModal" role="dialog" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width: 400px;">
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-15">
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <span>ویرایش دسته</span>
+                                    <button class="bi bi-x-lg btn btn-danger"
+                                            style="float: left;
+                                            padding: 7px 7px 7px 7px;
+                                            border-radius: 5px" id="close_modal_btn"></button>
+                                </div>
+                                <div class="card-body">
+                                    <form action="" method="post" style="margin-bottom: 0;">
+                                        <div class="mb-3">
+                                            <label for="exampleFormControlInput1" class="form-label">نام دسته</label>
+                                            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="مثلا لوازم الکتریکی یا کتاب...">
+                                        </div>
+
+                                        <button type="submit" style="margin-bottom: 0 !important;" class="btn btn-primary mb-3" >ثبت تغییر</button>
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+
+</script>

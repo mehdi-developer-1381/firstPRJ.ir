@@ -1,8 +1,8 @@
 import './bootstrap';
 
 import Alpine from 'alpinejs';
-import 'remixicon/fonts/remixicon.css';
 import 'material-icons/iconfont/material-icons.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 window.Alpine = Alpine;
 

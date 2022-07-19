@@ -15,7 +15,7 @@
                 @endif
             </td>
             <td style="text-align: center; padding: 4px 2px 4px 2px;">
-                <button role="update_category_btn" category_update_btn_id="{{$category->id}}" class="btn btn-primary" type="button" data-toggle="tooltip" data-placement="top" title="Edit">
+                <button role="update_category_btn"  category_update_btn_id="{{$category->id}}" class="btn btn-primary" type="button" title="Edit">
                     <span>ویرایش</span>
                 </button>
 
