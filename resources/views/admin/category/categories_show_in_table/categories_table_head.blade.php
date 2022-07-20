@@ -3,7 +3,11 @@
     <th style="font-family: vazir-font;">شناسه دسته</th>
     <th>نام کاربر</th>
     <th>نام دسته</th>
+    @if($table_head === "trashed")
+    <th>زمان حذف</th>
+    @else
     <th>زمان ثبت</th>
+    @endif
 
     @if($table_head === "active")
         <th></th>
