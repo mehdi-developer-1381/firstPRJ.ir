@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
 
 class categoryController extends Controller
 {
@@ -25,8 +26,9 @@ class categoryController extends Controller
 
     public function store(Request $request,$user_create_category)
     {
-        $category_validate=$request->validate([
-            "category_name" => "required|max:20|min:4|unique:categories",
+
+        $category_validate=Validator::make($request->all(),[
+            "category_name" => ["required","max:20","min:4","unique:categories"],
         ],[
             "category_name.min" => "کاراکتر کمتر از حد مجاز",
             "category_name.max" => "کاراکتر بیشتر از حد مجاز",
@@ -34,14 +36,16 @@ class categoryController extends Controller
             "category_name.unique" => "این دسته قبلا ثبت شده است",
         ]);
 
-        $category_created=null;
-        if($category_validate){
-           $category_store=Category::create([
-               "user_id" => $user_create_category,
-               "category_name" => $request->input("category_name")
-           ]);
 
-            $request->ajax();
+        if($category_validate->fails()){
+           return \redirect()->back()
+               ->withErrors($category_validate,"create_category_error")
+               ->withInput();
+        }else{
+            $category_store=Category::create([
+                "user_id" => $user_create_category,
+                "category_name" => $request->input("category_name")
+            ]);
 
             return \redirect()->back()->with("category_message","active")->with("message_active","created_category");
         }
@@ -65,13 +69,38 @@ class categoryController extends Controller
     public function update(Request $request)
     {
         if($request->except("_token")) {
-            $category_name_ready_for_update = $request->input("category_name");
-            $category_id_ready_for_update = $request->input("category_id");
-            Category::find($category_id_ready_for_update)->update([
-                "category_name"=>$category_name_ready_for_update
+            $category_validate=Validator::make($request->all(),
+            [
+                "category_name"=>["required","min:4","max:20","unique:categories"]
+            ],[
+                "category_name.min" => "کاراکتر کمتر از حد مجاز",
+                "category_name.max" => "کاراکتر بیشتر از حد مجاز",
+                "category_name.required" => "لطفا مقداری وارد کنید",
+                "category_name.unique" => "این دسته قبلا ثبت شده است",
             ]);
 
-            return \redirect()->back();
+
+
+            if($category_validate->fails()) {
+                // this var stay here for use after turned
+                session()->put("category_id",$request->input("category_id"));
+
+                return \redirect()->back()
+                    ->withErrors($category_validate,"update_category_error")
+                    ->withInput();
+            }else{
+                $category_name_ready_for_update = $request->input("category_name");
+                if(!session("category_id")){
+                    session()->put("category_id",$request->input("category_id"));
+                }
+                $category_id_ready_for_update = session("category_id");
+                Category::find($category_id_ready_for_update)->update([
+                    "category_name" => $category_name_ready_for_update
+                ]);
+                session()->remove("category_id");
+                return \redirect()->back();
+            }
+
         }
     }
 

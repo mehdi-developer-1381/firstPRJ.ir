@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\categoryController;
+use App\Http\Controllers\brandController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,7 +34,7 @@ Route::middleware([
 
 Route::get("demo",["uses"=>"App\\Http\\Controllers\\Controller@test"])->name("demo");
 
-//Category controller
+//Category Routes
 Route::group(["prefix"=>"categories"],function(){
     Route::get("",[categoryController::class,"index"])
         ->name("categories");
@@ -56,7 +57,11 @@ Route::group(["prefix"=>"categories"],function(){
     Route::post("/total/remove/force",[categoryController::class,"total_force_delete"])
         ->name("category.total.force.delete");
 
+});
 
+//Brand Routes
+Route::group(["prefix"=>"brands"],function(){
+   Route::get("/",[brandController::class,"index"])->name("brands");
 });
 
 

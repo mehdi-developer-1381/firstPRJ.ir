@@ -21,7 +21,8 @@
                                         @csrf
                                         <div class="mb-3">
                                             <label for="exampleFormControlInput1" class="form-label">نام دسته</label>
-                                            <input type="text" name="category_name" class="form-control" id="exampleFormControlInput1" placeholder="مثلا لوازم الکتریکی یا کتاب...">
+                                            <input type="text" name="category_name" class="form-control" id="input_categoryName_for_modal" placeholder="مثلا لوازم الکتریکی یا کتاب..." style="margin-bottom: 5px;">
+                                            <span id="edit-categoryName-error-message" style="color: red; font-size: 15px;"></span>
                                             <input type="text" name="category_id" id="input_categoryId_for_modal" hidden>
                                         </div>
 

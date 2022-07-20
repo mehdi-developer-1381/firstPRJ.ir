@@ -28,11 +28,16 @@
 
                             <div class="mb-3">
                                 <label for="text-categoryName" class="form-label">نام دسته</label>
-                                <input tabindex="1  " type="text" value="{{old("category_name")}}" name="category_name" class="form-control" id="text-categoryName" placeholder="مثلا لوازم الکتریکی یا کتاب....">
+                                <input tabindex="1  " type="text" name="category_name" class="form-control" id="text-categoryName" placeholder="مثلا لوازم الکتریکی یا کتاب....">
 
-                                @error("category_name")
-                                <span class="text-danger" style="font-size: 14px;">{{$message}}</span>
-                                @enderror
+                                @if($errors->create_category_error->any())
+                                        @foreach($errors->create_category_error->all() as $error)
+                                            <span style="color: red; font-size: 15px;">{{$error}}</span>
+                                        @endforeach
+                                        <script>
+                                            $("#text-categoryName").attr("value","{{old("category_name")}}")
+                                        </script>
+                                @endif()
                             </div>
                             <div class="d-grid gap-2 d-md-block">
                                 <input class="btn btn-success" type="submit" value="ثبت" tabindex="2">
