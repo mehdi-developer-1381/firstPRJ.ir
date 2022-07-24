@@ -62,6 +62,8 @@ Route::group(["prefix"=>"categories"],function(){
 //Brand Routes
 Route::group(["prefix"=>"brands"],function(){
    Route::get("/",[brandController::class,"index"])->name("brands");
+   Route::post("/total/remove",[brandController::class,"total_delete"])->name("brand.total.delete");
+
 });
 
 
