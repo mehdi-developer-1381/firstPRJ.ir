@@ -21,7 +21,6 @@
     {{--show error message--}}
     @if($errors->update_category_error->any())
         @foreach($errors->update_category_error->all() as $error)
-            <span>{{$error}}</span>
         @endforeach
 
         @if($error)

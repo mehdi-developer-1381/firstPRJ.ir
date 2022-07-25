@@ -1,6 +1,6 @@
-{{--<button  class="btn btn-success" data-toggle="modal" data-target="#myModal">Launch Demo Modal</button>--}}
+{{--<button  class="btn btn-success" data-toggle="modal" data-target="#brandModal">Launch Demo Modal</button>--}}
 
-<div class="modal" id="myModal" role="dialog" >
+<div class="modal" id="brandModal" role="dialog" >
     <div class="modal-dialog" role="document">
         <div class="modal-content" style="width: 400px;">
             <div class="modal-body">
@@ -9,21 +9,25 @@
                         <div class="col-md-15">
 
                             <div class="card">
+
+                                {{--brand card head--}}
                                 <div class="card-header">
-                                    <span>ویرایش دسته</span>
-                                    <button class="bi bi-x-lg btn btn-danger"
-                                            style="float: left;
+                                    <span>ویرایش برند</span>
+                                    <button class="bi bi-x-lg btn btn-danger" style="float: left;
                                             padding: 7px 7px 7px 7px;
                                             border-radius: 5px" id="close_modal_btn"></button>
                                 </div>
+
+
+                                {{--brand card body--}}
                                 <div class="card-body">
-                                    <form action="{{route("category.update")}}" method="post" style="margin-bottom: 0;">
+                                    <form action="{{route("brand.update")}}" method="post" style="margin-bottom: 0;">
                                         @csrf
                                         <div class="mb-3">
-                                            <label for="exampleFormControlInput1" class="form-label">نام دسته</label>
-                                            <input type="text" name="category_name" class="form-control" id="input_categoryName_for_modal" placeholder="مثلا لوازم الکتریکی یا کتاب..." style="margin-bottom: 5px;">
-                                            <span id="edit-categoryName-error-message" style="color: red; font-size: 15px;"></span>
-                                            <input type="text" name="category_id" id="input_categoryId_for_modal" hidden>
+                                            <label for="exampleFormControlInput1" class="form-label">نام برند</label>
+                                            <input type="text" name="brand_name" class="form-control" id="input_brandName_for_modal" placeholder="مثلا سونی،ایکس ویژن،ساسونگ ..." style="margin-bottom: 5px;">
+                                            <span id="edit-brandName-error-message" style="color: red; font-size: 15px;"></span>
+                                            <input type="text" name="brand_id" id="input_brandId_for_modal" hidden>
                                         </div>
 
                                         <button type="submit" style="margin-bottom: 0 !important;" class="btn btn-primary mb-3" >ثبت تغییر</button>

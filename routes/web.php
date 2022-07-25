@@ -33,6 +33,7 @@ Route::middleware([
 });
 
 Route::get("demo",["uses"=>"App\\Http\\Controllers\\Controller@test"])->name("demo");
+Route::post("demo2",["uses"=>"App\\Http\\Controllers\\Controller@demo2"])->name("demo2");
 
 //Category Routes
 Route::group(["prefix"=>"categories"],function(){
@@ -61,9 +62,14 @@ Route::group(["prefix"=>"categories"],function(){
 
 //Brand Routes
 Route::group(["prefix"=>"brands"],function(){
-   Route::get("/",[brandController::class,"index"])->name("brands");
-   Route::post("/total/remove",[brandController::class,"total_delete"])->name("brand.total.delete");
+   Route::get("/",[brandController::class,"index"])
+       ->name("brands");
 
+   Route::post("/total/remove",[brandController::class,"total_delete"])
+       ->name("brand.total.delete");
+
+   Route::post("/update",[brandController::class,"update"])
+       ->name("brand.update");
 });
 
 

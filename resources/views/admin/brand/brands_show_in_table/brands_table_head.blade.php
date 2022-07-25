@@ -2,6 +2,7 @@
 <tr>
     <th style="font-family: vazir-font;">شناسه برند</th>
     <th>نام برند</th>
+    <th>تصویر برند</th>
     <th>زمان ثبت</th>
     <th></th>
     <th style="text-align: center; padding: 4px 2px 4px 2px; direction: ltr; ">
