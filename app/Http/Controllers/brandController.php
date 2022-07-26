@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Brand;
+use App\My_Classes\viewClass;
+use App\Models\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use function PHPUnit\Framework\isEmpty;
@@ -14,61 +16,107 @@ class brandController extends Controller
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     public function index(Request $request)
     {
-        $brands = Brand::paginate(5,"*","brands");
+
+
+        $brands = Brand::paginate(5,"*","brand_page");
         return view("admin.brand.index",compact("brands"));
     }
 
-    // total delete brands method
+
+
+
+    // method brand store
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    public function total_delete(Request $request)
+    public function store(Request $request)
     {
-        //brands id
-        $brandId_from_brand_table = $request->input("brands");
+        //checked for is not empty $request
+        if($request->except("_token")){
 
-        // Check is empty
-        if($brandId_from_brand_table){
+            //brand name for create a new brand
+            $brand_name=$request->input("brand_name");
 
-            // var for removed brands
-            $removed_brands = Brand::destroy($brandId_from_brand_table);
+            //if set brand_name || if not empty
+            if($brand_name){
+                $create_brand_validate = Validator::make($request->except("_token"),[
+                    "brand_name"            => ["required","min:4","max:20","unique:brands"],
+                    "brand_logo"            => ["required","image","max:1024","mimes:jpeg,png,jpg,gif,webp"]
+                ],[
+                    "brand_name.required"   => "لطفا مقداری وارد کنید",
+                    "brand_name.min"        => "کاراکتر کمتر از حد مجاز",
+                    "brand_name.max"        => "کاراکتر بیشتر از حد مجاز",
+                    "brand_name.unique"     => "این برند قبلا ثبت شده است",
+                    "brand_logo.required"   => "انتخاب تصویر ضروری است",
+                    "brand_logo.image"      => "لطفا فایل تصویری انتخاب کنید",
+                    "brand_logo.max"        => "حجم عکس بالاتر از 1 مگابایت است",
+                    "brand_logo.mimes"      => "فرمت تصویر نامعتبر است",
 
-            // check brands removed
-            if($removed_brands){
+                ]);
 
-                // brand job done details for show successful message
-                $brand_condition               = "successful";
-                $brand_job_done                = "soft_deleted";
-                $brand_job_done_alert_svg      = "m12.002 21.534c5.518 0 9.998-4.48 9.998-9.998s-4.48-9.997-9.998-9.997c-5.517 0-9.997 4.479-9.997 9.997s4.48 9.998 9.997 9.998zm0-1.5c-4.69 0-8.497-3.808-8.497-8.498s3.807-8.497 8.497-8.497 8.498 3.807 8.498 8.497-3.808 8.498-8.498 8.498zm0-6.5c-.414 0-.75-.336-.75-.75v-5.5c0-.414.336-.75.75-.75s.75.336.75.75v5.5c0 .414-.336.75-.75.75zm-.002 3c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1z";
-                $brand_job_done_alert_message  = "برندهای موردنظر با موفقیت حذف شدند";
-                $brand_job_done_alert_class    = "danger";
+                //if brand name validate is failed
+                if($create_brand_validate->fails()){
+                    return redirect()
+                        ->back()
+                        ->withErrors($create_brand_validate,"create_brand_errors")
+                        ->withInput();
 
-            }else{
+                }
+                else{//now we can create a new brand
 
-                // brand job done details for show unsuccessful message
-                $brand_condition               = "unsuccessful";
-                $brand_job_done                = "soft_deleted";
-                $brand_job_done_alert_svg      = "m12.002 21.534c5.518 0 9.998-4.48 9.998-9.998s-4.48-9.997-9.998-9.997c-5.517 0-9.997 4.479-9.997 9.997s4.48 9.998 9.997 9.998zm0-1.5c-4.69 0-8.497-3.808-8.497-8.498s3.807-8.497 8.497-8.497 8.498 3.807 8.498 8.497-3.808 8.498-8.498 8.498zm0-6.5c-.414 0-.75-.336-.75-.75v-5.5c0-.414.336-.75.75-.75s.75.336.75.75v5.5c0 .414-.336.75-.75.75zm-.002 3c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1z";
-                $brand_job_done_alert_message  = "عملیات نا موفق";
-                $brand_job_done_alert_class    = "warning";
+                    //create new brand in Brand Model
+                    $create_new_brand = Brand::create([
+                        "brand_name" => $brand_name
+                    ]);
+
+//                     ** Image Handling **
+
+                    if($request->file("brand_logo")){
+
+                        //make it image new name
+                        $image_original_name = $brand_name;
+                        $image_original_name_extension = $request->file("brand_logo")->getClientOriginalExtension();
+                        $image_new_name = $image_original_name.".".$image_original_name_extension;
+
+                        //move image to public path
+                        $request->file("brand_logo")->move(public_path("images/admin/brand/"),"$image_new_name");
+
+                        //extract brandId from this was made brand
+                        $brand_id = Brand::all()->where("brand_name","===","$brand_name")->all();
+                        $brand_id = $brand_id[array_key_first($brand_id)]->brand_id;
+
+
+                        Brand::find($brand_id)->image()->create([
+                            "image_name"        => $image_original_name,
+                            "image_path"        => asset("images/admin/brand/".$image_new_name),
+                            "image_foreign_id"  => $brand_id,
+                        ]);
+
+                        // brand job done details for show unsuccessful message
+                        $brand_condition               = "successful";
+                        $brand_job_done                = "store_brand";
+                        $brand_job_done_alert_svg      = "M12 0c6.623 0 12 5.377 12 12s-5.377 12-12 12-12-5.377-12-12 5.377-12 12-12zm0 1c6.071 0 11 4.929 11 11s-4.929 11-11 11-11-4.929-11-11 4.929-11 11-11zm7 7.457l-9.005 9.565-4.995-5.865.761-.649 4.271 5.016 8.24-8.752.728.685z";
+                        $brand_job_done_alert_message  = "برند با موفقیت ثبت شد";
+                        $brand_job_done_alert_class    = "success";
+
+
+                        return redirect()->back()->with([
+                            "brand_session_is_on"=>[
+                                "brand_condition"              => $brand_condition,
+                                "brand_job_done"               => $brand_job_done,
+                                "brand_job_done_alert_svg"     => $brand_job_done_alert_svg,
+                                "brand_job_done_alert_message" => $brand_job_done_alert_message,
+                                "brand_job_done_alert_class"   => $brand_job_done_alert_class
+                            ]
+                        ]);
+                    }
+
+                }
             }
-        }else{
-                // brand is not found message
-                $brand_condition               = null;
-                $brand_job_done                = null;
-                $brand_job_done_alert_svg      = "m12.002 21.534c5.518 0 9.998-4.48 9.998-9.998s-4.48-9.997-9.998-9.997c-5.517 0-9.997 4.479-9.997 9.997s4.48 9.998 9.997 9.998zm0-1.5c-4.69 0-8.497-3.808-8.497-8.498s3.807-8.497 8.497-8.497 8.498 3.807 8.498 8.497-3.808 8.498-8.498 8.498zm0-6.5c-.414 0-.75-.336-.75-.75v-5.5c0-.414.336-.75.75-.75s.75.336.75.75v5.5c0 .414-.336.75-.75.75zm-.002 3c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1z";
-                $brand_job_done_alert_message  = "لطفا یک برند انتخاب کنید";
-                $brand_job_done_alert_class    = "warning";
-        }
 
-        return redirect()->back()->with([
-            "brand_session_is_on"=>[
-                "brand_condition"              => $brand_condition,
-                "brand_job_done"               => $brand_job_done,
-                "brand_job_done_alert_svg"     => $brand_job_done_alert_svg,
-                "brand_job_done_alert_message" => $brand_job_done_alert_message,
-                "brand_job_done_alert_class"   => $brand_job_done_alert_class
-            ]
-        ]);
+        }
     }
+
+
+
 
     // update brands method
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -79,13 +127,18 @@ class brandController extends Controller
         if($request->except("_token")){
 
             //validate brand name
-            $brand_name_validate=Validator::make($request->all(),[
-                "brand_name"=>["required","min:4","max:20","unique:brands"]
+            $brand_name_validate=Validator::make($request->except(["_token","brand_id"]),[
+                "brand_name"            => ["required","min:4","max:20","unique:brands"],
+                "brand_logo"            => ["required","image","max:1024","mimes:jpeg,png,jpg,gif,webp"]
             ],[
-                "brand_name.required" => "لطفا مقداری وارد کنید",
-                "brand_name.min" => "کاراکتر کمتر از حد مجاز",
-                "brand_name.max" => "کاراکتر بیشتر از حد مجاز",
-                "brand_name.unique" => "این برند قبلا ثبت شده است",
+                "brand_name.required"   => "لطفا مقداری وارد کنید",
+                "brand_name.min"        => "کاراکتر کمتر از حد مجاز",
+                "brand_name.max"        => "کاراکتر بیشتر از حد مجاز",
+                "brand_name.unique"     => "این برند قبلا ثبت شده است",
+                "brand_logo.required"   => "انتخاب تصویر ضروری است",
+                "brand_logo.image"      => "لطفا فایل تصویری انتخاب کنید",
+                "brand_logo.max"        => "حجم عکس بالاتر از 1 مگابایت است",
+                "brand_logo.mimes"      => "فرمت تصویر نامعتبر است",
             ]);
 
             //checked validate result
@@ -96,12 +149,49 @@ class brandController extends Controller
 
                 //redirect back with errors
                 return redirect()->back()
-                    ->withErrors($brand_name_validate,"brand_update_error")
+                    ->withErrors($brand_name_validate,"brand_update_errors")
                     ->withInput();
             }else {
-
                 //if don't fails
-                $brand_update=Brand::find($request->input("brand_id"))->update(["brand_name"=>$request->input("brand_name")]);
+
+                //update brand_name
+//                Brand::find($request->input("brand_id"))->update(
+//                    ["brand_name"=>$request->input("brand_name")]
+//                );
+
+                //update brand image
+
+                //brand_name && brand_id
+                $brand_id_for_update_image   = $request->input("brand_id");
+                $brand_name_for_update_image = $request->input("brand_name");
+
+
+                //build a new image path for imagable table
+                $brand_new_imagePath_assetFormat = asset("images/admin/brand/".$brand_name_for_update_image.".".$request
+                        ->file("brand_logo")
+                        ->getClientOriginalExtension());
+
+
+                //processing on updating imagePath on filesystem//
+
+                //build a new image path for filesystem
+                $brand_new_imagePath_publicFormat =
+                        public_path("images/admin/brand/".$brand_name_for_update_image.".".$request
+                        ->file("brand_logo")
+                        ->getClientOriginalExtension());
+
+
+                //previous image path
+                $brand_previous_imagePath=Brand::find($brand_id_for_update_image)->image()->get()[0];
+                dd($brand_previous_imagePath);
+
+                rename($brand_previous_imagePath,$brand_new_imagePath_assetFormat);
+
+                Brand::find($brand_id_for_update_image)
+                    ->image()->update([
+                        "image_path" => $brand_new_imagePath
+                    ]);
+
 
                 // brand update message
                 $brand_condition = "successful";
@@ -129,4 +219,137 @@ class brandController extends Controller
             ]
         ]);
     }
+
+
+
+
+    // total delete brands method
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    public function total_delete(Request $request)
+    {
+        //brands id
+        $brandId_from_brand_table = $request->input("brands");
+
+        // Check is empty
+        if($brandId_from_brand_table){
+
+            //remove brand image
+            foreach($brandId_from_brand_table as $brand_id){
+
+                //stet:1 ==> select brand with id
+                $brand_selected = Brand::find($brand_id);
+
+                //step:2 ==> extract image_path by brand
+                $brand_selected = $brand_selected->image()->get();
+
+                //if sometimes is not found image, he must return to back
+                if(!empty($brand_selected) && !isset($brand_selected[0])){
+
+                    //fاگر زمانی بر حسب اتفاق، تصویر رو پیدا نکرد، باید هم از فایل سیستم اون عکس رو حذف کنیم، و هم خود این برند رو
+
+                    //brand delete from brandsTable
+                    Brand::destroy($brand_id);
+
+                    //brand_name, sometime if needed
+                    $brands_name=$request->input("brands_name");
+
+                    //brand image delete from filesystem
+                    foreach($brands_name as $brand_name) {
+
+                        //possible extension, because isn't here
+                        $possible_extension=["jpeg","png","jpg","gif","webp"];
+                        foreach($possible_extension as $extension){
+
+
+                            if(is_file(public_path("images/admin/brand/".$brand_name.".".$extension))){
+                                unlink(public_path("images/admin/brand/".$brand_name.".".$extension));
+                            }
+                        }
+
+                    }
+
+                    // brand job done details for show successful message
+                    $brand_condition               = null;
+                    $brand_job_done                = null;
+                    $brand_job_done_alert_svg      = "m12.002 21.534c5.518 0 9.998-4.48 9.998-9.998s-4.48-9.997-9.998-9.997c-5.517 0-9.997 4.479-9.997 9.997s4.48 9.998 9.997 9.998zm0-1.5c-4.69 0-8.497-3.808-8.497-8.498s3.807-8.497 8.497-8.497 8.498 3.807 8.498 8.497-3.808 8.498-8.498 8.498zm0-6.5c-.414 0-.75-.336-.75-.75v-5.5c0-.414.336-.75.75-.75s.75.336.75.75v5.5c0 .414-.336.75-.75.75zm-.002 3c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1z";
+                    $brand_job_done_alert_message  = "برندهای موردنظر با موفقیت حذف شدند";
+                    $brand_job_done_alert_class    = "danger";
+
+                    return redirect()->back()->with([
+                        "brand_session_is_on"=>[
+                            "brand_condition"              => $brand_condition,
+                            "brand_job_done"               => $brand_job_done,
+                            "brand_job_done_alert_svg"     => $brand_job_done_alert_svg,
+                            "brand_job_done_alert_message" => $brand_job_done_alert_message,
+                            "brand_job_done_alert_class"   => $brand_job_done_alert_class
+                        ]
+                    ]);
+
+                }else {
+
+                    //step:3 ==> extract baseName from the image_path
+                    $brand_selected_baseName = basename($brand_selected[0]->image_path);
+
+                    //now here we ready for remove image form filesystem
+                    $path = public_path("images/admin/brand/" . $brand_selected_baseName);
+                    unlink($path);
+
+                }
+            }
+
+
+
+            // var for removed brands
+            $removed_brands = Brand::destroy($brandId_from_brand_table);
+
+
+            // check brands removed
+            if($removed_brands){
+
+                // brand job done details for show successful message
+                $brand_condition               = "successful";
+                $brand_job_done                = "soft_deleted";
+                $brand_job_done_alert_svg      = "m12.002 21.534c5.518 0 9.998-4.48 9.998-9.998s-4.48-9.997-9.998-9.997c-5.517 0-9.997 4.479-9.997 9.997s4.48 9.998 9.997 9.998zm0-1.5c-4.69 0-8.497-3.808-8.497-8.498s3.807-8.497 8.497-8.497 8.498 3.807 8.498 8.497-3.808 8.498-8.498 8.498zm0-6.5c-.414 0-.75-.336-.75-.75v-5.5c0-.414.336-.75.75-.75s.75.336.75.75v5.5c0 .414-.336.75-.75.75zm-.002 3c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1z";
+                $brand_job_done_alert_message  = "برندهای موردنظر با موفقیت حذف شدند";
+                $brand_job_done_alert_class    = "danger";
+
+            }else{
+
+                // brand job done details for show unsuccessful message
+                $brand_condition               = "unsuccessful";
+                $brand_job_done                = "soft_deleted";
+                $brand_job_done_alert_svg      = "m12.002 21.534c5.518 0 9.998-4.48 9.998-9.998s-4.48-9.997-9.998-9.997c-5.517 0-9.997 4.479-9.997 9.997s4.48 9.998 9.997 9.998zm0-1.5c-4.69 0-8.497-3.808-8.497-8.498s3.807-8.497 8.497-8.497 8.498 3.807 8.498 8.497-3.808 8.498-8.498 8.498zm0-6.5c-.414 0-.75-.336-.75-.75v-5.5c0-.414.336-.75.75-.75s.75.336.75.75v5.5c0 .414-.336.75-.75.75zm-.002 3c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1z";
+                $brand_job_done_alert_message  = "عملیات نا موفق";
+                $brand_job_done_alert_class    = "warning";
+            }
+        }else{
+            // brand is not found message
+            $brand_condition               = null;
+            $brand_job_done                = null;
+            $brand_job_done_alert_svg      = "m12.002 21.534c5.518 0 9.998-4.48 9.998-9.998s-4.48-9.997-9.998-9.997c-5.517 0-9.997 4.479-9.997 9.997s4.48 9.998 9.997 9.998zm0-1.5c-4.69 0-8.497-3.808-8.497-8.498s3.807-8.497 8.497-8.497 8.498 3.807 8.498 8.497-3.808 8.498-8.498 8.498zm0-6.5c-.414 0-.75-.336-.75-.75v-5.5c0-.414.336-.75.75-.75s.75.336.75.75v5.5c0 .414-.336.75-.75.75zm-.002 3c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1z";
+            $brand_job_done_alert_message  = "لطفا یک برند انتخاب کنید";
+            $brand_job_done_alert_class    = "warning";
+        }
+
+        return redirect()->back()->with([
+            "brand_session_is_on"=>[
+                "brand_condition"              => $brand_condition,
+                "brand_job_done"               => $brand_job_done,
+                "brand_job_done_alert_svg"     => $brand_job_done_alert_svg,
+                "brand_job_done_alert_message" => $brand_job_done_alert_message,
+                "brand_job_done_alert_class"   => $brand_job_done_alert_class
+            ]
+        ]);
+    }
+
+
+
+
+
+
+
+
+
+
+
 }

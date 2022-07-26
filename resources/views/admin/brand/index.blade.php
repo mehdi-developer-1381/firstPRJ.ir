@@ -19,27 +19,32 @@
     @include("admin.brand.brand_edit_modal",$brands)
 
 
-    @if($errors->brand_update_error->any())
+    @if($errors->brand_update_errors->any())
 
-        @foreach($errors->brand_update_error->all() as $error)
-        @endforeach
+        <script>
 
-        @if($error)
-            <script>
+            $(document).ready(function(){
+                $("#brandModal").modal("show");
+                $("#close_modal_btn").click(function(){
+                    $("#brandModal").modal("hide");
+                });
 
-                $(document).ready(function(){
-                    $("#brandModal").modal("show");
-                    $("#close_modal_btn").click(function(){
-                        $("#brandModal").modal("hide");
-                    });
+                //this input for keep brand_id
+                $("#input_brandId_for_modal").attr("{{session("update_brand")}}");
+            })
 
-                    //this input for keep brand_id
-                    $("#input_brandId_for_modal").attr("{{session("update_brand")}}");
+            //make brand_name error message
+            @foreach($errors->brand_update_errors->get("brand_name") as $brand_name_error)
+            $("#edit-brandName-error-message").text("{{$brand_name_error}}")
+            @endforeach
 
-                    $("#edit-brandName-error-message").text("{{$error}}");
-                })
-            </script>
-        @endif
+            //make brand_logo error message
+            @foreach($errors->brand_update_errors->get("brand_logo") as $brand_logo_error)
+            $("#edit-brandImage-error-message").text("{{$brand_logo_error}}")
+            @endforeach
+
+        </script>
+
     @endif
 
     {{--brand message--}}

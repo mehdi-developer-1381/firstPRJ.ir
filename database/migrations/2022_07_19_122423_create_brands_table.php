@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('brands', function (Blueprint $table) {
             $table->bigIncrements("brand_id");
             $table->string("brand_name");
-            $table->string("brand_image");
             $table->timestamps();
         });
     }

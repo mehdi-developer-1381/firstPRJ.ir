@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\User;
 use Carbon\Carbon;
@@ -25,12 +26,9 @@ class Controller extends BaseController
 
     public function test()
     {
-      return view("demo/demo");
-
+        dd(Brand::find(19)->image()->get()[0]->image_name);
     }
 
-    public function demo2(Request $request)
-    {
-    }
+
 
 }

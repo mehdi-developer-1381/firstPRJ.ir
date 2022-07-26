@@ -70,6 +70,9 @@ Route::group(["prefix"=>"brands"],function(){
 
    Route::post("/update",[brandController::class,"update"])
        ->name("brand.update");
+
+    Route::post("/store/{user_id?}",[brandController::class,"store"])
+        ->name("brand.store");
 });
 
 
