@@ -11,7 +11,12 @@ class Brand extends Model
     protected $fillable=["brand_name","brand_image"];
     protected $primaryKey="brand_id";
 
-    function image(){
+    public function image(){
         return $this->morphOne(Image::class,"imagable","imagable_type","imagable_id","brand_id");
+    }
+
+    public function setBrandNameAttribute($brand_name)
+    {
+        return $this->attributes["brand_name"] = strtolower($brand_name);
     }
 }

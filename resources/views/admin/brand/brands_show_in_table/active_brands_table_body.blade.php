@@ -23,7 +23,7 @@
 
             {{--btn for update brand--}}
             <td style="text-align: center; padding: 4px 2px 4px 2px;">
-                <button role="update_brand_btn"  brand_update_btn_id="{{$brand->brand_id}}" style="margin-top: 28px;" class="btn btn-primary" type="button" title="Edit">
+                <button role="update_brand_btn"  brand_update_btn_id="{{$brand->brand_id}}" brand_update_btn_name="{{$brand->brand_name}}" style="margin-top: 28px;" class="btn btn-primary" type="button" title="Edit">
                     <span>ویرایش</span>
                 </button>
             </td>

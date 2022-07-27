@@ -30,17 +30,17 @@
                 });
 
                 //this input for keep brand_id
-                $("#input_brandId_for_modal").attr("{{session("update_brand")}}");
+                $("#input_brandId_for_modal").attr("value","{{session("keep_brand_id")}}");
             })
 
             //make brand_name error message
             @foreach($errors->brand_update_errors->get("brand_name") as $brand_name_error)
-            $("#edit-brandName-error-message").text("{{$brand_name_error}}")
+                $("#edit-brandName-error-message").text("{{$brand_name_error}}")
             @endforeach
 
             //make brand_logo error message
             @foreach($errors->brand_update_errors->get("brand_logo") as $brand_logo_error)
-            $("#edit-brandImage-error-message").text("{{$brand_logo_error}}")
+                $("#edit-brandImage-error-message").text("{{$brand_logo_error}}")
             @endforeach
 
         </script>
@@ -65,6 +65,11 @@
 
         // merge brand-id to modal form input value
         $("#input_brandId_for_modal").attr("value", this.getAttribute("brand_update_btn_id"))
+
+        $("#input_brandName_for_modal").attr("value", this.getAttribute("brand_update_btn_name"));
+        $("#input_brandName_for_modal").focus();
+
+
 
         // // Close modal on button click
         $("#close_modal_btn").click(function () {
