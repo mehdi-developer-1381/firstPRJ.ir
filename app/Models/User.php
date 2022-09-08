@@ -68,4 +68,29 @@ class User extends Authenticatable
         return $this->hasOne(Category::class,"user_id","id");
     }
 
+
+    public function updateUser(array $newInfo)
+    {
+
+        $user = User::find($this->attributes["id"]);
+        $user->update($newInfo);
+
+
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

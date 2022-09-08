@@ -11,6 +11,13 @@ use Illuminate\Support\Facades\Validator;
 
 class categoryController extends Controller
 {
+    // Constructor Method
+    public function __construct(){
+        $this->middleware("auth");
+    }
+
+
+
     public function index(Request $request)
     {
         $trashed_categories="";
@@ -122,11 +129,14 @@ class categoryController extends Controller
             }
         }elseif($request_all["target"] === "restore"){
             $restore_category="";
-
-            foreach($request_all["categories"] as $category){
-                $restore_category=Category::onlyTrashed()->find($category)->restore();
-            }
-            if($restore_category){
+            if(isset($request_all["categories"])){
+                foreach($request_all["categories"] as $category){
+                    $restore_category=Category::onlyTrashed()->find($category)->restore();
+                }
+                if($restore_category){
+                    return \redirect()->back();
+                }
+            }else{
                 return \redirect()->back();
             }
         }else{

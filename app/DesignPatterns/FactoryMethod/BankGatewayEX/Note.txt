@@ -1,0 +1,9 @@
+در این مثال
+ب bankInterface و تمامی حامیان او میشن product
+ب creator میشه BankGatewayCreator
+ب factory هم میشه اونایی که از creator ،ب extend کردن، یعنی اونایی که Factory آخر اسمشون هست
+
+کلا به سه قسمت تقسیم میشه این الگو
+product
+creator
+factory

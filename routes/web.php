@@ -33,10 +33,13 @@ Route::middleware([
 });
 
 Route::get("demo",["uses"=>"App\\Http\\Controllers\\Controller@test"])->name("demo");
-Route::post("demo2",["uses"=>"App\\Http\\Controllers\\Controller@demo2"])->name("demo2");
+
+Route::get("demo2",function(){
+    return view("demo.demo");
+})->name("demo2");
 
 //Category Routes
-Route::group(["prefix"=>"categories"],function(){
+Route::group(["prefix" => "categories"],function(){
     Route::get("",[categoryController::class,"index"])
         ->name("categories");
 

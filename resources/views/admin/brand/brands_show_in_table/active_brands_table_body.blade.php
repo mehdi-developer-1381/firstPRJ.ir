@@ -3,15 +3,15 @@
         <tr>
 
             {{--brand detail show in table--}}
-            <td style="line-height: 80px;">{{$brand->brand_id}}</td>
-            <td style="line-height: 80px;">{{$brand->brand_name}}</td>
+            <td style="line-height: 80px;" id="td_for_brandID">{{$brand->brand_id}}</td>
+            <td style="line-height: 80px;" id="td_for_brandName">{{$brand->brand_name}}</td>
             <td>
                 @php($image=$brand->image()->get())
                 @if(!empty($image) && isset($image[0]))
-                    <img src="{{$image[0]->image_path}}" style="width: 150px;height: 80px;" alt="">
+                    <img src="{{$image[0]->image_path}}" style="width: 150px;height: 80px;border-radius: 15px;" alt="">
                 @endif
             </td>
-            <td style="line-height: 80px;">
+            <td style="line-height: 80px;" >
 
                 {{--check created_at--}}
                 @if($brand->created_at)

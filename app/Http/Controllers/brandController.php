@@ -3,23 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Models\Brand;
-use App\My_Classes\viewClass;
 use App\Models\Image;
-use Dflydev\DotAccessData\Data;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
-use function PHPUnit\Framework\isEmpty;
-use function PHPUnit\Framework\isNull;
 
 class brandController extends Controller
 {
+    // Constructor Method
+    public function __construct(){
+        $this->middleware("auth");
+    }
+
     // show brands in table method
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     public function index(Request $request)
     {
 
-
-        $brands = Brand::paginate(5,"*","brand_page");
+        $brands = Brand::latest()->paginate(5,"*","brand_page");
         return view("admin.brand.index",compact("brands"));
     }
 
@@ -30,6 +31,7 @@ class brandController extends Controller
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     public function store(Request $request)
     {
+
         //checked for is not empty $request
         if($request->except("_token")){
 
@@ -67,7 +69,7 @@ class brandController extends Controller
                     "brand_name" => $brand_name
                 ]);
 
-//                     ** Image Handling **
+                //** Image Handling **
 
                 if($request->file("brand_logo")){
 
@@ -84,7 +86,7 @@ class brandController extends Controller
                     $brand_id = $brand_id[array_key_first($brand_id)]->brand_id;
 
 
-                    Brand::find($brand_id)->image()->create([
+                    $crate_new_brand_image = Brand::find($brand_id)->image()->create([
                         "image_name"        => $image_original_name.".".$image_original_name_extension,
                         "image_path"        => asset("images/admin/brand/".$image_new_name),
                         "image_foreign_id"  => $brand_id,

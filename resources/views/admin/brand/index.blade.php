@@ -76,6 +76,7 @@
             $("#brandModal").modal('hide');
         });
     });
+
 </script>
 </html>
 

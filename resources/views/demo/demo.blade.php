@@ -1,4 +1,4 @@
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -9,18 +9,7 @@
 </head>
 <body>
 
-<form action="{{route("demo2")}}" method="post" enctype="multipart/form-data">
-    @csrf
-    <input type="file" name="image" >
-    <br>
-    <br>
-    <input type="submit" value="submit">
-</form>
 
-
-    <script>
-
-    </script>
 </body>
 </html>
 
