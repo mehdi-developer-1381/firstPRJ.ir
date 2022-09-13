@@ -2,14 +2,16 @@
 namespace App\Http\Controllers;
 
 
-use App\DesignPatterns\Structional\BridgePattern\EX01\Messaging\PDFMessaging;
-use App\DesignPatterns\Structional\BridgePattern\EX01\Messenger\Telegram;
-use App\DesignPatterns\Structional\CompositePattern\EX01\PlayList;
-use App\DesignPatterns\Structional\CompositePattern\EX01\Song;
-use App\DesignPatterns\Structional\CompositePattern\EX02\Companies\Dice;
-use App\DesignPatterns\Structional\CompositePattern\EX02\Job;
-use App\DesignPatterns\Structional\CompositePattern\EX02\Languages\PhpLang;
-use App\DesignPatterns\Structional\CompositePattern\EX02\Programmers\Backend;
+
+
+
+use App\DesignPatterns\Behavioural\ChinOfResposibilidy\EX01\Solution\Coupon\Coupon;
+use App\DesignPatterns\Behavioural\ChinOfResposibilidy\EX01\Problem\CouponValidator;
+
+use App\DesignPatterns\Behavioural\ChinOfResposibilidy\EX01\Solution\Coupon\CheckActiveCoupon;
+use App\DesignPatterns\Behavioural\ChinOfResposibilidy\EX01\Solution\Coupon\CheckAvailableCoupon;
+use App\DesignPatterns\Behavioural\ChinOfResposibilidy\EX01\Solution\Coupon\CheckExistsCoupon;
+use App\DesignPatterns\Behavioural\ChinOfResposibilidy\EX01\Solution\UsedCoupon;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -20,19 +22,14 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    public function test(Backend $backend,PhpLang $phpLang,Dice $dice)
+    public function test(Coupon $coupon)
     {
-
-
-        $job= new Job();
-        $job->setProgrammerFullName($backend)->setFullName("MehdiMosalaei");
-        $job->setCompany($dice)->setCompanyName("Dice");
-        $job->setProgrammingLang($phpLang)->setLanguage("PHP");
-
-
-        dd($job->getThisPosition());
+        $validator=[
+            new CheckExistsCoupon($coupon),
+        ];
+        $useCoupon= new UsedCoupon(...$validator);
+        $useCoupon->validateCoupon("7Learn");
     }
-
 }
 
 

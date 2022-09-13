@@ -34,6 +34,7 @@ Route::middleware([
 
 Route::get("demo",["uses"=>"App\\Http\\Controllers\\Controller@test"])->name("demo");
 
+
 Route::get("demo2",function(){
     return view("demo.demo");
 })->name("demo2");
